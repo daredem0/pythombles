@@ -1,0 +1,205 @@
+#:kivy 2.0
+
+<BackgroundColor@Widget>
+    background_color: 1, 1, 1, 1
+    canvas.before:
+        Color:
+            rgba: root.background_color
+        Rectangle:
+            size: self.size
+            pos: self.pos
+# Now you can simply Mix the `BackgroundColor` class with almost
+# any other widget... to give it a background.
+<BackgroundLabel@Label+BackgroundColor>
+    background_color: 0, 0, 0, 0
+
+<MyAction@ActionBar>:
+    background_color: 0, .4, .7, 1
+    size_hint_y: None
+    height: '35dp'
+    ActionView:
+        id: av1
+        ActionPrevious:
+            title: ''
+            with_previous: False
+            app_icon: ''
+            app_icon_width: 0
+            app_icon_height: 0
+            size_hint_x: None
+            width: len(self.title) * 10
+        ActionGroup:
+            id: group_1
+            text: "Options"
+            mode: 'spinner'
+            ActionButton:
+                important: True
+                text: 'Home'
+                on_press: app.root.current = 'device'
+            ActionButton:
+                important: True
+                text: 'Add IP Device'
+                on_press: app.root.current = 'settings_ip'
+            ActionButton:
+                important: True
+                text: 'Change Device'
+                on_press: app.root.facade("mes_device_type", "home")
+                #on_press: app.root.current = 'device_type'
+
+<Scope>:
+    id:scope
+	GridLayout:
+		cols:1
+		size: root.width, root.height
+	    #padding: 10
+		#spacing: 10
+		MyAction:
+    		id: myactA
+
+<PowerSupply>:
+    id:mygrid
+	GridLayout:
+		cols:1
+		size: root.width, root.height
+	    #padding: 10
+		#spacing: 10
+		MyAction:
+    		id: myactA
+
+		GridLayout:
+    		id: glB
+			cols:2
+
+			Label:
+				text: "Device: "
+
+    		Spinner:
+        		id: spinner_1
+                text: 'Choose Device <click me>'
+                values: 'notset', 'notset'
+                on_text:root.btn_refresh_device()
+
+			Label:
+				text: "Channel: "
+
+    		Spinner:
+        		id: spinner_2
+                text: 'Choose Channel <click me>'
+                values: 'notset', 'notset'
+                on_text:root.btn_refresh_channel()
+			Label:
+				text: "Current Voltage [V]: "
+
+			Label:
+				id: lb_curr_volt
+
+			Label:
+				text: "Voltage [V]: "
+
+			TextInput:
+				id: ti_set_volt
+				multiline:False
+
+			Label:
+				text: "Current Amplitude [A]: "
+
+			Label:
+    			id: lb_curr_amp
+
+			Label:
+				text: "Current Limit [A]: "
+
+			TextInput:
+				id: ti_set_amp
+				multiline:False
+
+            Button:
+                id: btn_set_val
+                text: "Set Values"
+                on_press:root.btn_set()
+
+            Button:
+                id: btn_set_out
+                text: "Out"
+                on_press:root.btn_out()
+        ScrollView:
+            do_scroll_x: False
+            do_scroll_y: True
+            scroll_type: ['bars']
+            bar_width:  10
+
+            Label:
+                id: scroll_label
+                size_hint_y: None
+                height: self.texture_size[1]
+                text_size: self.width, None
+                padding: 10, 10
+
+<DeviceTypeScreen>:
+    id: DeviceType
+    GridLayout:
+		cols:1
+		size: root.width, root.height
+	    #padding: 10
+		#spacing: 10
+
+        AnchorLayout:
+            anchor_x: 'center'
+            anchor_y: 'center'
+            GridLayout:
+                row_force_default: True
+                row_default_height: '64dp'
+                size_hint_y: None
+                height: self.minimum_height
+                cols: 1
+                GridLayout:
+                    row_force_default: True
+                    row_default_height: '32dp'
+                    size_hint_y: None
+                    height: self.minimum_height
+                    cols: 2
+                    BackgroundLabel:
+                        background_color: 0, .4, .7, 1
+                        text: "Device"
+            		Spinner:
+                		id: spinner_device_type
+                        text: 'Choose Device type <click me>'
+                        values: 'Some device with options', 'Some empty device'
+                        on_text:root.btn_refresh_device_type()
+
+<AddIpScreen>:
+    id: AddIpScreen
+    GridLayout:
+		cols:1
+		size: root.width, root.height
+	    #padding: 10
+		#spacing: 10
+		MyAction:
+    		id: myactB
+
+        AnchorLayout:
+            anchor_x: 'center'
+            anchor_y: 'center'
+            GridLayout:
+                row_force_default: True
+                row_default_height: '32dp'
+                size_hint_y: None
+                height: self.minimum_height
+                cols: 1
+                GridLayout:
+                    row_force_default: True
+                    row_default_height: '32dp'
+                    size_hint_y: None
+                    height: self.minimum_height
+                    cols: 2
+                    BackgroundLabel:
+                        background_color: 0, .4, .7, 1
+                        text: "IP Address"
+
+                    TextInput:
+                        id: ti_setting_ip
+                        multiline:False
+                Button:
+                    id: btn_set_ip
+                    text: "Set IP"
+                    on_press:root.btn_ip()
+
